@@ -14,9 +14,9 @@ export default class Choose extends React.Component{
         <View style={styles.container}>
           <View style={styles.Title}>
             <Text h2 style={{color:"#fff"}}>Welcome</Text>
-            <Text h4 style={styles.areyou}>So are you :</Text>
           </View>
           <View style={styles.choose}>
+          <Text h4 style={styles.areyou}>So are you :</Text>
             <Button
             buttonStyle={{
               margin:10,
@@ -66,23 +66,27 @@ export default class Choose extends React.Component{
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#fff',
+      backgroundColor: '#35b546',
     //   alignItems: 'center',
       // justifyContent: 'center',
     },
     Title:{
       backgroundColor:'#35b546',
-      flex:1,
+      flex:0.5,
       flexDirection:'column',
       justifyContent: 'space-between',
       paddingTop:50,
       paddingLeft:10 
     },
     areyou:{
-      color:'#fff',
+      marginLeft:10,
+      color:'#35b546',
     },
     choose:{
+      backgroundColor:'#fff',
+      borderTopLeftRadius: 30, 
+      borderTopRightRadius: 30,
       flex:3,
-      marginTop:10
+      paddingTop:20
     }
   });

@@ -62,6 +62,7 @@ export default class LoginS extends React.Component{
         buttonStyle={{borderColor:"#35b546" , justifyContent:'flex-start'}}
         type='clear' 
         title="Sign Up"
+        onPress={()=>{this.props.navigation.navigate('Sign Up')}}
         />
     <Button
         titleStyle={{fontSize:20 , color:"#35b546" , marginRight:10}}
