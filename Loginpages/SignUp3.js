@@ -6,16 +6,38 @@ import { Complete } from './complete';
 import {  AntDesign} from '@expo/vector-icons';
 import CodeInput from 'react-native-confirmation-code-input';
 
+import { Codeverification } from "./loginservice";
+
 export default class SignUp3 extends React.Component{
 
     constructor(props){
      super(props);
+     const {state} = props.navigation;
+     this.state={
+        etudiantid:state.params.etudiantid,
+        email:state.params.email
+     }
+
+    }
+
+    verifycode(code){
+        Codeverification(this.state.etudiantid , code).then(
+            data=>{
+                console.log(data.data);
+                if(data.data.is_verfied == true){
+                    this.props.navigation.navigate('Sign Up 4' , {email:this.state.email , etudiantid:this.state.etudiantid});
+
+                }else{
+
+                }
+            }
+        )
     }
 
     render(){
         return(
         <KeyboardAvoidingScrollView extraScrollHeight={16}   style={styles.container}>
-            <Complete comp={3} title="Email Verification :" subtitle="Please Enter the Verification Code send to" ></Complete>
+            <Complete comp={3} title="Email Verification :" subtitle={"Please Enter the Verification Code send to : "+this.state.email} ></Complete>
             <CodeInput
             className={'border-b'}
             ref="codeInputRef1"
@@ -24,10 +46,10 @@ export default class SignUp3 extends React.Component{
             space={5}
             size={40}
             autoFocus={true}
-            keyboardType="numeric"
+            // keyboardType="numeric"
             inputPosition='center'
             // onChange={()=>{console.log("rd")}}
-            onFulfill={(code) => console.log(code)}
+            onFulfill={(code) => this.verifycode(code)}
             />
 
             <View style={{alignItems:'flex-end'}}>

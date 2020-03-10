@@ -1,16 +1,37 @@
 import * as React from 'react';
 import { Button  , Text , Avatar , Input  } from 'react-native-elements';
-import { View , StyleSheet} from 'react-native';
+import { View , StyleSheet , AsyncStorage} from 'react-native';
 import { MaterialIcons  , Ionicons , SimpleLineIcons} from '@expo/vector-icons';
 import { KeyboardAvoidingScrollView } from 'react-native-keyboard-avoiding-scroll-view';
 
-
-export default class LoginS extends React.Component{
+import { LoginStudent } from "./loginservice";
+export default class LoginS extends React.Component{ 
 
     constructor(props){
      super(props);
+     this.state={
+        email:'',
+        password:'',
+     }
     }
+    Login = async ()=>{
+     if(this.state.email && this.state.password){
+        LoginStudent(this.state.email , this.state.password).then(
+          data=>{
+           AsyncStorage.setItem("Token",data.data.access_token).then(
+               data=>{
+                    this.props.navigation.navigate("LoadingScrenn")
+               }
+           )
+         
+          }
+      ).catch(
+          e=>{
 
+          }
+      )
+     }
+     }
     render(){
 
     return(
@@ -28,12 +49,14 @@ export default class LoginS extends React.Component{
         </View>
         <View style={styles.form}>
         <Input
+        onChange={(e)=>{this.setState({email:e.nativeEvent.text})}}
         labelStyle={styles.label}
         label="Email adress"
         placeholder='Ex: email@gmail.com'
         leftIcon={ <MaterialIcons name="email" size={32} color="#01ae18c4" style={{marginLeft:-10 , width:40}} />}
         />
         <Input
+        onChange={(e)=>{this.setState({password:e.nativeEvent.text})}}
         labelStyle={styles.label}
         containerStyle={{marginTop:20}}
         secureTextEntry={true}
@@ -54,6 +77,7 @@ export default class LoginS extends React.Component{
             />
         }
         title="Login"
+        onPress={()=>{this.Login()}}
         />
         </View>
 <View style={styles.footer}>

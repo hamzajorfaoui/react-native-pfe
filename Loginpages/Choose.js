@@ -2,11 +2,12 @@ import * as React from 'react';
 import { Button  , Text } from 'react-native-elements';
 import { View , StyleSheet, Image } from 'react-native';
 
+
 export default class Choose extends React.Component{
 
     constructor(props){
      super(props);
-    }
+    }   
 
 
   render(){
