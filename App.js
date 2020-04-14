@@ -1,13 +1,16 @@
 import React from 'react';
 
-import Login from './Loginpages/LoginNavigation';
+import Approute from './Loginpages/LoginNavigation';
+import navigationService from './Services/navigationService';
 
 
 
 export default function App() {
   return (
 
-    <Login/>
+    <Approute  ref={navigatorRef => {
+      navigationService.setTopLevelNavigator(navigatorRef);
+    }}/>
   );
 }
-
+ 

@@ -5,7 +5,7 @@ import { KeyboardAvoidingScrollView } from 'react-native-keyboard-avoiding-scrol
 import { Complete } from './complete';
 import { Ionicons , AntDesign} from '@expo/vector-icons';
 
-import { passwordconfirm } from "./loginservice";
+import { passwordconfirm } from "../loginservice";
 
 const InputCustom = props=> <Input
                             {...props}

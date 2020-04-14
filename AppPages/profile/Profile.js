@@ -1,20 +1,23 @@
 import * as React from 'react';
-import { View, Text , StyleSheet} from 'react-native';
+import { View, Text , StyleSheet , AsyncStorage} from 'react-native';
 
 
 
-export default class Accceil extends React.Component{ 
+export default class Profile extends React.Component{ 
 
 
         
     constructor(props){
         super(props);
+        // this.remove()
     } 
+
+
     
     render(){
         return(
             <View style={styles.container}>
-                <Text>accceil</Text>
+                <Text>Profile</Text>
             </View>
         )
     }

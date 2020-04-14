@@ -9,9 +9,9 @@ export function Complete(props){
      let prog=[];
      for (let index = 0; index < 4; index++) {
          if(index < number){
-            prog.push(<View style={styles.progV}></View>); 
+            prog.push(<View key={index} style={styles.progV}></View>); 
          }else{
-            prog.push(<View style={styles.prog}></View>); 
+            prog.push(<View key={index} style={styles.prog}></View>); 
          }
          
      }

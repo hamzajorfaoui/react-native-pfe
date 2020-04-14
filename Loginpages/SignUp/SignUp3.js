@@ -6,7 +6,7 @@ import { Complete } from './complete';
 import {  AntDesign} from '@expo/vector-icons';
 import CodeInput from 'react-native-confirmation-code-input';
 
-import { Codeverification } from "./loginservice";
+import { Codeverification } from "../loginservice";
 
 export default class SignUp3 extends React.Component{
 

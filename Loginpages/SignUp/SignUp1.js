@@ -5,11 +5,12 @@ import { KeyboardAvoidingScrollView } from 'react-native-keyboard-avoiding-scrol
 import { Complete } from './complete';
 import { MaterialIcons  , Ionicons , AntDesign} from '@expo/vector-icons';
 
-import {SignUpS} from "./loginservice";
+import {SignUpS} from "../loginservice";
 const InputCustom = props=> <Input
                             {...props}
                             labelStyle={{color:"#01ae18"}}
                             containerStyle={{marginTop:20}}/>
+                            
 export default class SignUp1 extends React.Component{
 
     constructor(props){
@@ -19,9 +20,12 @@ export default class SignUp1 extends React.Component{
          password:'',
          loading:false,
          errorMessage:"" , 
-         passwordMessage:""
+         passwordMessage:"",
+         change:false
      }
+    this.pwdfield = React.createRef();
     }
+
     componentDidUpdate(prevProps , prevState){
     if(prevState.email != this.state.email || prevState.password != this.state.password ){
         this.setState({errorMessage:"" , passwordMessage:""});
@@ -31,7 +35,7 @@ export default class SignUp1 extends React.Component{
         console.log("ok")
         // pkncqjiA
         if(this.state.email.endsWith("@ests.com") && this.state.password){
-            this.setState({loading:true})
+            this.setState({loading:true});
             SignUpS(this.state.email , this.state.password).then(
                 data=>{
                     console.log(data.data.etudiant);
@@ -56,6 +60,7 @@ export default class SignUp1 extends React.Component{
     }
 
     render(){
+       
         return(
         <KeyboardAvoidingScrollView extraScrollHeight={50} style={styles.container}>
             <View >
@@ -63,15 +68,22 @@ export default class SignUp1 extends React.Component{
             <InputCustom 
                         onChange={(e)=>{this.setState({email:e.nativeEvent.text})}}
                         label="Email"
+                        autoFocus={true} 
+                        returnKeyType="next"
+                        onSubmitEditing={(e)=>{this.pwdfield.current.focus()}} 
                         placeholder='CNE@ests.com'
                         errorMessage={ this.state.errorMessage}
                         leftIcon={ <MaterialIcons name="email" size={32} color="#01ae18c4" style={{marginLeft:-10 , width:40}} />}></InputCustom>
-            <InputCustom secureTextEntry={true}
+
+            <Input      ref={this.pwdfield}
+                        secureTextEntry={true}
                         onChange={(e)=>{this.setState({password:e.nativeEvent.text})}}
                         label="Password"
                         placeholder='password'
+                        labelStyle={{color:"#01ae18"}}
+                        containerStyle={{marginTop:20}}
                         errorMessage={ this.state.passwordMessage}
-                        leftIcon={ <Ionicons name="ios-lock" size={32} color="#01ae18c4" style={{marginLeft:-5 , width:35}} />}></InputCustom>
+                        leftIcon={ <Ionicons name="ios-lock" size={32} color="#01ae18c4" style={{marginLeft:-5 , width:35}} />}/>
             <View style={{alignItems:'flex-end'}}>
             <Button
             disabled={this.state.loading}

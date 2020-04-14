@@ -2,7 +2,7 @@
 
 import  APIURL  from "../APIURL";
 import axios from 'axios';
-
+ 
 export function LoginStudent(email , password){
 
    return axios.post(APIURL+"/api/etudiant/login", {email:email , password:password})

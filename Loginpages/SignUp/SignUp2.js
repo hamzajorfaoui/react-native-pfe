@@ -5,11 +5,21 @@ import { KeyboardAvoidingScrollView } from 'react-native-keyboard-avoiding-scrol
 import { Complete } from './complete';
 import { MaterialIcons  , Ionicons , AntDesign} from '@expo/vector-icons';
 
-import { EmailStudent } from "./loginservice";
+import { EmailStudent } from "../loginservice";
 const InputCustom = props=> <Input
                             {...props}
                             labelStyle={{color:"#01ae18"}}
                             containerStyle={{marginTop:20}}/>
+export const valideemail = (text) => {  
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+    if (reg.test(text) === false) {
+        return false;
+      }
+      else {
+        return true;
+      }
+}
 export default class SignUp2 extends React.Component{
 
     constructor(props){
@@ -17,14 +27,20 @@ export default class SignUp2 extends React.Component{
      const {state} = props.navigation;
      this.state={
         loading:false,
+        errorMessage:"",
         etudiantid:state.params.etudiantid,
         email:''
      }
     }
-
+    componentDidUpdate(prevProps , prevState){
+        if(prevState.email != this.state.email){
+            this.setState({errorMessage:""});
+        }
+        }
     confirmemailS(){
-        if(this.state.email){
+        if(this.state.email && valideemail(this.state.email)){
             this.setState({loading:true})
+
             EmailStudent(this.state.email , this.state.etudiantid).then(
             data=>{
                 if(data.data == "email verfication sended"){
@@ -39,14 +55,20 @@ export default class SignUp2 extends React.Component{
                 this.setState({loading:false})
             })
         }
+
+        if(!valideemail(this.state.email)){
+            this.setState({errorMessage:"This Email is invalid !!"})
+        }
         
     }
 
+
     render(){
         return(
-        <KeyboardAvoidingScrollView extraScrollHeight={16}   style={styles.container}>
+        <KeyboardAvoidingScrollView extraScrollHeight={16}   style={styles.container} >
             <Complete comp={2} title="Enter Your Personnal Email :" subtitle="" ></Complete>
             <InputCustom 
+                        errorMessage={ this.state.errorMessage}
                         onChange={(e)=>{this.setState({email:e.nativeEvent.text})}}
                         label="Email"
                         placeholder='EX : adress@gamil.com'

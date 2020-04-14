@@ -4,7 +4,8 @@ import { View , StyleSheet , AsyncStorage} from 'react-native';
 import { MaterialIcons  , Ionicons , SimpleLineIcons} from '@expo/vector-icons';
 import { KeyboardAvoidingScrollView } from 'react-native-keyboard-avoiding-scroll-view';
 
-import { LoginStudent } from "./loginservice";
+import { LoginStudent } from "../loginservice";
+import { valideemail} from "../SignUp/SignUp2";
 export default class LoginS extends React.Component{ 
 
     constructor(props){
@@ -12,25 +13,42 @@ export default class LoginS extends React.Component{
      this.state={
         email:'',
         password:'',
+        loading:false,
+        errorMessage:"" , 
+        passwordMessage:"",
      }
+     this.pwdfield = React.createRef();
+    }
+    componentDidUpdate(prevProps , prevState){
+        if(prevState.email != this.state.email || prevState.password != this.state.password ){
+            this.setState({errorMessage:"" , passwordMessage:""});
+        }
     }
     Login = async ()=>{
-     if(this.state.email && this.state.password){
+     if(valideemail(this.state.email) && this.state.password){
+        this.setState({loading:true});
         LoginStudent(this.state.email , this.state.password).then(
           data=>{
            AsyncStorage.setItem("Token",data.data.access_token).then(
                data=>{
+                    this.setState({loading:false});
                     this.props.navigation.navigate("LoadingScrenn")
                }
            )
-         
-          }
-      ).catch(
+        }
+        ).catch(
           e=>{
-
-          }
-      )
+            
+            this.setState({loading:false , errorMessage:"Email or Pwd are wrong !!!"});
+          })
      }
+     if(!valideemail(this.state.email)){
+     this.setState({errorMessage:"email invalid !!"})
+     }
+     if(this.state.password.trim() == ""){
+        this.setState({passwordMessage:"password required !!"})
+     }
+
      }
     render(){
 
@@ -51,15 +69,23 @@ export default class LoginS extends React.Component{
         <Input
         onChange={(e)=>{this.setState({email:e.nativeEvent.text})}}
         labelStyle={styles.label}
+        autoFocus={true}
+        autoCapitalize = 'none' 
+        returnKeyType="next"
+        onSubmitEditing={(e)=>{this.pwdfield.current.focus()}}
         label="Email adress"
         placeholder='Ex: email@gmail.com'
+        errorMessage={ this.state.errorMessage}
         leftIcon={ <MaterialIcons name="email" size={32} color="#01ae18c4" style={{marginLeft:-10 , width:40}} />}
         />
         <Input
+        ref={this.pwdfield} 
         onChange={(e)=>{this.setState({password:e.nativeEvent.text})}}
         labelStyle={styles.label}
         containerStyle={{marginTop:20}}
         secureTextEntry={true}
+        errorMessage={ this.state.passwordMessage}
+        returnKeyType="done"
         label="Password"
         placeholder='password'
         leftIcon={ <Ionicons name="ios-lock" size={32} color="#01ae18c4" style={{marginLeft:-5 , width:35}} />}
@@ -69,6 +95,8 @@ export default class LoginS extends React.Component{
         titleStyle={{fontSize:20 , color:"#35b546" , marginLeft:10}}
         buttonStyle={{borderColor:"#35b546"}}
         type='outline' 
+        loading={this.state.loading}
+        loadingProps={{color:"#35b546"}}
         icon={
             <SimpleLineIcons
             name="login"
