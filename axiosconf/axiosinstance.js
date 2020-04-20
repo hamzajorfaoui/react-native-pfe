@@ -33,6 +33,7 @@ axiosinstance.interceptors.response.use( reponse =>{
     }
     goToLoading();
   }
+  return error
 })
 
 export default axiosinstance;

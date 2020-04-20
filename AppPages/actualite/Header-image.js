@@ -7,7 +7,6 @@ import {
   StyleSheet,
   Text,
   View,
-  RefreshControl,
   ActivityIndicator,
 } from 'react-native';
 import APIURL from '../../APIURL';
@@ -96,17 +95,17 @@ export default class HeaderImage extends Component {
             [{ nativeEvent: { contentOffset: { y: this.state.scrollY } } }],
             { useNativeDriver: false },
           )}
-          refreshControl={
-            <RefreshControl
-              refreshing={this.state.refreshing}
-              onRefresh={() => {
-                this.setState({ refreshing: true });
-                setTimeout(() => this.setState({ refreshing: false }), 1000);
-              }}
-              // Android offset for RefreshControl
-              progressViewOffset={HEADER_MAX_HEIGHT}
-            />
-          }
+          // refreshControl={
+          //   <RefreshControl
+          //     refreshing={this.state.refreshing}
+          //     onRefresh={() => {
+          //       this.setState({ refreshing: true });
+          //       setTimeout(() => this.setState({ refreshing: false }), 1000);
+          //     }}
+          //     // Android offset for RefreshControl
+          //     progressViewOffset={HEADER_MAX_HEIGHT}
+          //   />
+          // }
           // iOS offset for RefreshControl
           contentInset={{
             top: HEADER_MAX_HEIGHT,
@@ -136,7 +135,9 @@ export default class HeaderImage extends Component {
             ]}
             resizeMode="contain"
             onLoad={()=>{this.setState({ imageloaded:true })}}
-            source={{uri:APIURL+this.props.Actualite.req_image}}
+            source={{uri:APIURL+this.props.Actualite.req_image 
+              // , cache: 'only-if-cached'
+            }}
           />
         {this.spinnerload()}
         </Animated.View>
@@ -162,7 +163,8 @@ const styles = StyleSheet.create({
   fill: {
     flex: 1,
     backgroundColor:"#fff",
-    padding:10
+    padding:10,
+    
   },
   content: {
     flex: 1,
@@ -182,7 +184,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     width: Dimensions.get('window').width,
-    height: HEADER_MAX_HEIGHT,
+    height: HEADER_MAX_HEIGHT
   },
   bar: {
     backgroundColor: "#35b546",
@@ -206,7 +208,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 30,
     // padding:20,
     // iOS uses content inset, which acts like padding.
-    paddingTop: Platform.OS !== 'ios' ? HEADER_MAX_HEIGHT : 0,
+    paddingTop: Platform.OS !== 'ios' ? HEADER_MAX_HEIGHT: 0,
   },
   row: {
     height: 40,

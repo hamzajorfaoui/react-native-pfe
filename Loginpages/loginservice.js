@@ -1,5 +1,3 @@
-
-
 import  APIURL  from "../APIURL";
 import axios from 'axios';
  
