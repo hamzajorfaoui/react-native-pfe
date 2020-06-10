@@ -45,14 +45,16 @@ export default class SignUp2 extends React.Component{
             data=>{
                 if(data.data == "email verfication sended"){
                     this.props.navigation.navigate('Sign Up 3' , {email:this.state.email , etudiantid:this.state.etudiantid});
-                    this.setState({loading:false})
                 }else{
-                   
+                    console.log(data.data);
+                    this.setState({errorMessage:"this email already exist"})
                 }
+                this.setState({loading:false})
 
             }
             ).catch(e=>{
-                this.setState({loading:false})
+                this.setState({loading:false});
+                console.log(e)
             })
         }
 

@@ -29,7 +29,7 @@ export default class Emploidutemps extends Component {
     }
 
     statut(){
-        if (this.state.loading) {
+        if (this.state.loading) { 
             return  <ActivityIndicator size="large" color="#35b546" />
         } 
         if (this.state.empty) {

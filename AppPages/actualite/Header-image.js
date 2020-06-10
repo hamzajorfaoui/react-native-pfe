@@ -8,7 +8,9 @@ import {
   Text,
   View,
   ActivityIndicator,
+  Image,
 } from 'react-native';
+import Carousel from 'react-native-snap-carousel';
 import APIURL from '../../APIURL';
 
 const HEADER_MAX_HEIGHT = 350;
@@ -25,19 +27,50 @@ export default class HeaderImage extends Component {
         Platform.OS === 'ios' ? -HEADER_MAX_HEIGHT : 0,
       ),
       refreshing: false,
-      imageloaded:false
+      imageloaded:false,
+      images:[],
+      title_heigh:32
     };
   }
-  
-  spinnerload=()=>{
-    return this.state.imageloaded == false ? <ActivityIndicator size="small" color="#35b546" style={styles.spinner}/> : <></>;
+  componentDidMount(){
+    let images = [];
+    this.props.Actualite.images.map(image=>{images=[...images,{loaded:false,image:image.image}];});
+    this.setState({images:[{loaded:false,image:this.props.Actualite.req_image},...images]});
+  } 
+  imageloaded=(index)=>{
+   this.setState({images:this.state.images.map((image,i)=>{
+     if(i==index){return{...image,loaded:true}}
+     return image;
+     })}); 
   }
+  spinnerload=(item)=>{
+    return item==true?<></>:<ActivityIndicator size="small" color="#35b546" style={styles.spinner}/>;
+  }
+  _renderItem = ({item, index}) => {
+    return (
+        <View style={{height:HEADER_MAX_HEIGHT}}>
+            <Image
+            style={[
+              styles.backgroundImage,
+            ]}
+            resizeMode="contain"
+            onLoad={()=>{this.imageloaded(index)}}
+            source={{uri:APIURL+item.image
+              // , cache: 'only-if-cached'
+            }}
+          />
+          {this.spinnerload(item.loaded)} 
+        </View>
+    );
+}
+  _carousel;
   _renderScrollViewContent() {
     const data = Array.from({ length: 30 });
     return (
       <View style={styles.scrollViewContent}>
             <Text>{this.props.Actualite.contenu}</Text>
-          </View>
+            <Text>{this.props.Actualite.contenu}</Text><Text>{this.props.Actualite.contenu}</Text><Text>{this.props.Actualite.contenu}</Text><Text>{this.props.Actualite.contenu}</Text><Text>{this.props.Actualite.contenu}</Text><Text>{this.props.Actualite.contenu}</Text><Text>{this.props.Actualite.contenu}</Text><Text>{this.props.Actualite.contenu}</Text>
+      </View>
     );
   }
 
@@ -80,7 +113,11 @@ export default class HeaderImage extends Component {
       outputRange: [HEADER_SCROLL_DISTANCE , HEADER_SCROLL_DISTANCE / 2, 0],
       extrapolate: 'clamp',
     });
-
+    const margin_title_top_translate= scrollY.interpolate({
+      inputRange: [HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
+      outputRange: [Platform.OS === 'ios' ? 60 : 58 , 40],
+      extrapolate: 'clamp',
+    });
     return (
       <View style={styles.fill}>
         <StatusBar
@@ -89,7 +126,7 @@ export default class HeaderImage extends Component {
           backgroundColor="rgba(0, 0, 0, 0.251)"
         />
         <Animated.ScrollView
-          style={styles.fill}
+          style={[styles.fill , {paddingTop:this.state.title_heigh}]}
           scrollEventThrottle={1}
           onScroll={Animated.event(
             [{ nativeEvent: { contentOffset: { y: this.state.scrollY } } }],
@@ -117,7 +154,7 @@ export default class HeaderImage extends Component {
           {this._renderScrollViewContent()}
         </Animated.ScrollView>
         <Animated.View
-          pointerEvents="none"
+          // pointerEvents="none"
           style={[
             styles.header,
              
@@ -125,23 +162,26 @@ export default class HeaderImage extends Component {
               transform: [{ translateY: headerTranslate }] },
           ]}
         >
-          <Animated.Image
-            style={[
-              styles.backgroundImage,
-              {
-                opacity: imageOpacity,
-                transform: [{ translateY: imageTranslate }],
-              },
-            ]}
-            resizeMode="contain"
-            onLoad={()=>{this.setState({ imageloaded:true })}}
-            source={{uri:APIURL+this.props.Actualite.req_image 
-              // , cache: 'only-if-cached'
-            }}
-          />
-        {this.spinnerload()}
+          <Animated.View
+        style={[
+          styles.backgroundImage,
+          {
+            opacity: imageOpacity,
+            transform: [{ translateY: imageTranslate }],
+          },
+        ]}
+        >
+          <Carousel
+              ref={(c) => { this._carousel = c; }}
+              data={this.state.images}
+              renderItem={this._renderItem}
+              sliderWidth={Dimensions.get('window').width}
+              itemWidth={Dimensions.get('window').width}
+            />
+        </Animated.View>
         </Animated.View>
         <Animated.View
+          onLayout={(event)=>{this.setState({title_heigh :event.nativeEvent.layout.height})}}
           style={[
             styles.bar,
             {
@@ -149,6 +189,7 @@ export default class HeaderImage extends Component {
                 // { scale: titleScale },
                 { translateY: titleTranslate },
               ],
+              marginTop:margin_title_top_translate
             },
           ]}
         >
@@ -163,8 +204,8 @@ const styles = StyleSheet.create({
   fill: {
     flex: 1,
     backgroundColor:"#fff",
-    padding:10,
-    
+    paddingLeft:10,
+    paddingRight:5
   },
   content: {
     flex: 1,
@@ -188,10 +229,10 @@ const styles = StyleSheet.create({
   },
   bar: {
     backgroundColor: "#35b546",
-    marginTop: Platform.OS === 'ios' ? 28 : 38,
-    paddingLeft:20,
-    paddingRight:20,
-    height: 32,
+    marginTop: Platform.OS === 'ios' ? 60 : 58,
+    paddingLeft:10,
+    paddingRight:10,
+    // height: 32,
     alignItems: 'center',
     justifyContent: 'center',
     position: 'absolute',
@@ -220,5 +261,7 @@ const styles = StyleSheet.create({
   spinner:{
     zIndex:100,
     marginTop:HEADER_MAX_HEIGHT/2
+  },slide:{
+    backgroundColor:"#D3D3D3"
   }
 });
