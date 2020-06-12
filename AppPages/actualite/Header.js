@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {ScrollView , View, Text ,StyleSheet , Animated , Dimensions,RefreshControl} from 'react-native';
+import {ScrollView , View, Text ,StyleSheet , Animated , Dimensions,RefreshControl, ActivityIndicator} from 'react-native';
 
 const HEADER_MAX_HEIGHT = 120; 
 export default class HeaderA extends React.Component{ 
@@ -32,7 +32,6 @@ export default class HeaderA extends React.Component{
       render() {
         const { scrollOffset } = this.state;
         const screenWidth = Dimensions.get('window').width;
-    
         return (
           <View style={styles.container}>
             
@@ -59,13 +58,18 @@ export default class HeaderA extends React.Component{
                 y: -HEADER_MAX_HEIGHT,
               }}
               >
+                <View style={styles.absence_section}>
+                <View >
+                <Text style={styles.title_absence}>Absence :</Text>
+                </View>               
+                 <View style={styles.nb_absence}>
+                 {
+                   this.props.absence_text!="none" ?  <Text style={styles.contenu_absence}>{this.props.absence_text}</Text>:<ActivityIndicator style={styles.contenu_absence} size="small" color="#35b546" /> 
+                 }
+                </View>
+                </View>
                 <View style={styles.content}>
                   {this.props.content}  
-                  {/* <View style={{height:200}}></View>
-                  <View style={{height:200}}></View>
-                  <View style={{height:200}}></View>
-                  <View style={{height:200}}></View>
-                  <View style={{height:200}}></View> */}
                 </View>
             </Animated.ScrollView>
 
@@ -99,15 +103,9 @@ export default class HeaderA extends React.Component{
                     extrapolate: 'clamp',
                   }),
                 }}>
-                Hamza Jorfaoui
+                {this.props.User_Info.fullname}
               </Animated.Text>
               <Animated.Text
-                // onLayout={e => {""
-                //   if (this.offset === 0 && this.state.titleWidth === 0) {
-                //     const titleWidth = e.nativeEvent.layout.width;
-                //     this.setState({ titleWidth });
-                //   }
-                // }}
                 style={{
                   marginLeft: 'auto',
                   color:"#fff",
@@ -118,17 +116,8 @@ export default class HeaderA extends React.Component{
                     extrapolate: 'clamp',
                   }),
                 }}>
-                GL 1
+                {this.props.User_Info.fillier}
               </Animated.Text>
-              <Animated.View
-                style={{
-                  // width: scrollOffset.interpolate({
-                  //   inputRange: [-50, 50],
-                  //   outputRange: [screenWidth * 0.9 - this.state.titleWidth, 0],
-                  //   extrapolate: 'clamp',
-                  // }),
-                }} 
-              />
             </Animated.View>
           </View>
         );
@@ -138,8 +127,6 @@ export default class HeaderA extends React.Component{
     const styles = StyleSheet.create({
       container: {
         flex: 1,
-        // alignItems: 'center',
-        // backgroundColor: '#35b546',
       },
       header: {
         backgroundColor: '#35b546',
@@ -147,20 +134,33 @@ export default class HeaderA extends React.Component{
         borderColor: '#35b546',
         flexDirection: 'row', 
         alignItems: 'flex-end',
-        // justifyContent: 'center',
         paddingBottom: 8,
-
-      
         position: 'absolute',
         top: 0,
         left: 0,
         right: 0,
-        // backgroundColor: '#fff',
         overflow: 'hidden',
-        // height: HEADER_MAX_HEIGHT,
       },
       content:{
         paddingTop: Platform.OS !== 'ios' ? HEADER_MAX_HEIGHT : 0,
+      },
+      absence_section:{
+      height:50,
+      backgroundColor:"#fff", 
+      flex:1,
+      flexDirection:"row",
+      padding:10
+      },
+      title_absence: {
+      fontSize:25,
+      color:"#35b546",
+      fontWeight:"bold"
+      },
+      contenu_absence:{
+        marginTop:8,
+        marginLeft:15,
+        fontSize:15,
+        color:"#35b546",
       }
     });
     

@@ -5,16 +5,22 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialIcons  , MaterialCommunityIcons ,   Ionicons} from '@expo/vector-icons';
 
 export default class Profile extends React.Component{ 
-
-
-        
     constructor(props){
         super(props);
-        // this.remove()
+        this.state={
+            userInfo:null
+        }
     } 
+    componentDidMount(){
+    this.getUserInfo()
+    }
+    getUserInfo = async ()=>{
+        const user = await AsyncStorage.getItem("user");
+        this.setState({userInfo:JSON.parse(user)});
+    }
     contents = [
         {
-            title:"hamza@gmail.com",
+            title:"Account Information",
             icon:<MaterialIcons name="email" size={25} color="#01ae18c4" style={{ width:26}}/>,
             chevron:false 
         },
@@ -72,10 +78,10 @@ export default class Profile extends React.Component{
                 />
                 
                  <Text style={styles.etudiantinfo}>
-                     Hamza Jorfaoui
+                     {this.state.userInfo ==null ? "":this.state.userInfo.fullname }
                  </Text>
                 <Text style={styles.etudiantinfo}>
-                     GL 1 
+                     {this.state.userInfo ==null ? "":this.state.userInfo.fillier} 
                  </Text>
                 </LinearGradient> 
                 <View>

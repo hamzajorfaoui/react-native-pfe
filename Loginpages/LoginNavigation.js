@@ -53,9 +53,11 @@ const LoginStack = createStackNavigator({
 
 export default Approute = createAppContainer(
   createSwitchNavigator(
-    {Authentification:LoginStack,  
+    {
+      Authentification:LoginStack,  
     LoadingScrenn:Loading,
-    APP:Bottomnavigation},
+    APP:Bottomnavigation
+  },
     {
       initialRouteName: 'LoadingScrenn', 
     }

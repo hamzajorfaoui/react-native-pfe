@@ -15,10 +15,14 @@ export default class Annonce extends React.Component{
             annonces:[],
             refreshing:true
         }
-      
+        this._isMounted = false;
     }
     componentDidMount(){
-          this.loadannonces();
+        this._isMounted = true;
+        this.loadannonces();
+    }
+    componentWillUnmount(){
+        this._isMounted = false;
     }
     convert_date(d){
         let date = Moment(d);
@@ -28,9 +32,10 @@ export default class Annonce extends React.Component{
     loadannonces=()=>{
         getAnnonces().then(data=>{
             var dt = data.data.data[0].date_prevue;
-            this.convert_date(dt)
-            this.setState({annonces:data.data.data},
-                ()=>{this.setState({refreshing:false})});
+            this.convert_date(dt);
+            if(this._isMounted){
+            this.setState({annonces:data.data.data},()=>{ this.setState({refreshing:false})});
+           }
         })
     }
 

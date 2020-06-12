@@ -74,7 +74,7 @@ export default class LoginS extends React.Component{
         returnKeyType="next"
         onSubmitEditing={(e)=>{this.pwdfield.current.focus()}}
         label="Email adress"
-        placeholder='Ex: email@gmail.com'
+        placeholder='Ex: name@gmail.com'
         errorMessage={ this.state.errorMessage}
         leftIcon={ <MaterialIcons name="email" size={32} color="#01ae18c4" style={{marginLeft:-10 , width:40}} />}
         />

@@ -69,7 +69,6 @@ export default class HeaderImage extends Component {
     return (
       <View style={styles.scrollViewContent}>
             <Text>{this.props.Actualite.contenu}</Text>
-            <Text>{this.props.Actualite.contenu}</Text><Text>{this.props.Actualite.contenu}</Text><Text>{this.props.Actualite.contenu}</Text><Text>{this.props.Actualite.contenu}</Text><Text>{this.props.Actualite.contenu}</Text><Text>{this.props.Actualite.contenu}</Text><Text>{this.props.Actualite.contenu}</Text><Text>{this.props.Actualite.contenu}</Text>
       </View>
     );
   }
@@ -113,11 +112,11 @@ export default class HeaderImage extends Component {
       outputRange: [HEADER_SCROLL_DISTANCE , HEADER_SCROLL_DISTANCE / 2, 0],
       extrapolate: 'clamp',
     });
-    const margin_title_top_translate= scrollY.interpolate({
-      inputRange: [HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
-      outputRange: [Platform.OS === 'ios' ? 60 : 58 , 40],
-      extrapolate: 'clamp',
-    });
+    // const margin_title_top_translate= scrollY.interpolate({
+    //   inputRange: [HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
+    //   outputRange: [Platform.OS === 'ios' ? 60 : 58 , 30],
+    //   extrapolate: 'clamp',
+    // });
     return (
       <View style={styles.fill}>
         <StatusBar
@@ -189,7 +188,7 @@ export default class HeaderImage extends Component {
                 // { scale: titleScale },
                 { translateY: titleTranslate },
               ],
-              marginTop:margin_title_top_translate
+              marginTop:this.state.title_heigh
             },
           ]}
         >
@@ -229,7 +228,7 @@ const styles = StyleSheet.create({
   },
   bar: {
     backgroundColor: "#35b546",
-    marginTop: Platform.OS === 'ios' ? 60 : 58,
+    // marginTop: Platform.OS === 'ios' ? 60 : 58,
     paddingLeft:10,
     paddingRight:10,
     // height: 32,
@@ -241,6 +240,7 @@ const styles = StyleSheet.create({
     right: 0,
   },
   title: {
+    textAlign:"center",
     color: "#fff",
     fontSize: 18,
   },
@@ -250,6 +250,7 @@ const styles = StyleSheet.create({
     // padding:20,
     // iOS uses content inset, which acts like padding.
     paddingTop: Platform.OS !== 'ios' ? HEADER_MAX_HEIGHT: 0,
+    marginBottom:50
   },
   row: {
     height: 40,

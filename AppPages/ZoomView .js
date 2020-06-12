@@ -44,9 +44,6 @@ render() {
       ref={this.setZoomRef} 
       style={{ overflow: 'hidden' }}
      >
-       {
-         !this.state.loading ?<></> :<View style={styles.container}><ActivityIndicator size="small" color="#35b546" /></View>
-       }
        <TouchableHighlight
          onPress={this.handleResetZoomScale}
        >
@@ -62,14 +59,19 @@ render() {
           }}
          />
        </TouchableHighlight>
+        {
+         !this.state.loading ?<></> :<View style={styles.container}><ActivityIndicator size="small" color="#35b546" /></View>
+        }
      </ScrollView>
    )
   }
 }
 const styles = StyleSheet.create({
   container:{
+    position:"absolute",
     flex:1,
     alignItems:"center",
-    justifyContent:"center"
+    justifyContent:"center",
+    zIndex:1000
     }
   })

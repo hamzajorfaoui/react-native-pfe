@@ -4,6 +4,7 @@ import  Header  from '../actualite/Header';
 
 import { ListItem } from 'react-native-elements'
 import { MaterialIcons  , MaterialCommunityIcons } from '@expo/vector-icons';
+import { getEtudiantabsence } from '../AppService';
 
 export default class Accceil extends React.Component{ 
 
@@ -14,15 +15,42 @@ export default class Accceil extends React.Component{
         // this.remove()
         this.state={
             list:[],
-            haha:"ok"
+            haha:"ok",
+            abcense_text:"none",
+            userInfo:{fullname:"",fillier:""}
         }
     } 
-
-    remove = async ()=>{
-        await   AsyncStorage.removeItem("Token");
-
-        this.props.navigation.navigate("LoadingScrenn")
+    getUserInfo = async ()=>{
+        const user = await AsyncStorage.getItem("user");
+        this.setState({userInfo:JSON.parse(user)});
     }
+    
+    componentDidMount(){
+        this.getUserInfo();
+        getEtudiantabsence().then(data=>{
+            this.setState({abcense_text:this.nb_seance_totext(data.data.countseances)});
+        });
+    }
+    nb_seance_totext(nbseance_origi){
+        let nbseance = nbseance_origi;
+        let total={
+          avertisement:0,
+          blamme :0
+        }
+        while(nbseance > 3){
+        if(nbseance>9){
+         total.blamme+=1;
+         nbseance-=9;
+        }else { 
+          total.avertisement+=1;
+          nbseance-=3;
+        }
+        }
+        let result =  total.blamme>0 ? total.blamme+" Blame ":" ";
+        result += total.avertisement+" Avertisement";
+        return result;
+        }
+
     
     contents = [
         {
@@ -61,8 +89,8 @@ export default class Accceil extends React.Component{
     }
 
     render(){
-        return(
-                <Header content={this.content()}></Header>
+        return( 
+                <Header content={this.content()} absence_text={this.state.abcense_text} User_Info={this.state.userInfo}></Header>
         )
     }
 
