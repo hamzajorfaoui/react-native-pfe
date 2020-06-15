@@ -14,6 +14,7 @@ export default class SignUp3 extends React.Component{
      super(props);
      const {state} = props.navigation;
      this.state={
+        loading:false,
         etudiantid:state.params.etudiantid,
         email:state.params.email
      }
@@ -21,17 +22,20 @@ export default class SignUp3 extends React.Component{
     }
 
     verifycode(code){
+        this.setState({loading:true});
         Codeverification(this.state.etudiantid , code).then(
             data=>{
                 console.log(data.data);
                 if(data.data.is_verfied == true){
                     this.props.navigation.navigate('Sign Up 4' , {email:this.state.email , etudiantid:this.state.etudiantid});
-
                 }else{
 
                 }
+                this.setState({loading:false});
             }
-        )
+        ).catch(e=>{
+            this.setState({loading:false}); 
+        })
     }
 
     render(){
@@ -54,6 +58,8 @@ export default class SignUp3 extends React.Component{
 
             <View style={{alignItems:'flex-end'}}>
             <Button
+            disabled={this.state.loading}
+            loading={this.state.loading}
             style={{marginTop:100,marginRight:10}}
             buttonStyle={{borderColor:"#35b546" , width:70, backgroundColor:'#35b546', padding:0}}
             icon={

@@ -32,8 +32,6 @@ export default class SignUp1 extends React.Component{
     }
     }
     SignUp=()=>{
-        console.log("ok")
-        // pkncqjiA
         if(this.state.email.endsWith("@ests.com") && this.state.password){
             this.setState({loading:true});
             SignUpS(this.state.email , this.state.password).then(

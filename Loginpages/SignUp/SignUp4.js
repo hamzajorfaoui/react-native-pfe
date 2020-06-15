@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Button  , Text , Input} from 'react-native-elements';
-import { View , StyleSheet, Image } from 'react-native';
+import { View , StyleSheet, Image ,AsyncStorage} from 'react-native';
 import { KeyboardAvoidingScrollView } from 'react-native-keyboard-avoiding-scroll-view';
 import { Complete } from './complete';
 import { Ionicons , AntDesign} from '@expo/vector-icons';
@@ -31,8 +31,13 @@ export default class SignUp4 extends React.Component{
         this.setState({loading:true})
       passwordconfirm(this.state.etudiantid , this.state.email , this.state.password).then(
           data=>{
-            this.setState({loading:false});
-              console.log(data.data)
+              console.log(data.data);
+              AsyncStorage.setItem("Token",data.data.access_token).then(
+                data=>{
+                     this.setState({loading:false});
+                     this.props.navigation.navigate("LoadingScrenn");
+                }
+            )
           }
       ).catch(e=>{
         this.setState({loading:false});

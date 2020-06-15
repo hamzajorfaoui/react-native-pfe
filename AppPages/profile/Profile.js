@@ -51,8 +51,8 @@ export default class Profile extends React.Component{
 
     ];
      logout= async ()=>{
-         console.log('okk')
         await AsyncStorage.removeItem('Token');
+        await AsyncStorage.removeItem('user');
         this.props.navigation.navigate('LoadingScrenn'); 
     }
 

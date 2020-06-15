@@ -37,7 +37,7 @@ export default class Annonce extends React.Component{
             this.setState({annonces:data.data.data},()=>{ this.setState({refreshing:false})});
            }
         })
-    }
+    } 
 
 
     render(){
